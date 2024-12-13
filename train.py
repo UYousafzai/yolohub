@@ -12,7 +12,7 @@ from torch.utils import data
 from yolohub.models.yolov11 import yolo_v11_n
 from yolohub.utils.general import (setup_seed, setup_multi_processes, set_params, EMA, strip_optimizer, LinearLR, 
                                    AverageMeter, ComputeLoss)
-from yolohub.utils.dataset_utils import Dataset
+from yolohub.utils.dataset_utils import DefaultDataset
 from yolohub.test import test
 
 warnings.filterwarnings("ignore")
@@ -38,13 +38,13 @@ def train(args, params):
             filenames.append(f'{data_dir}/images/train2017/' + filename)
 
     sampler = None
-    dataset = Dataset(filenames, args.input_size, params, augment=True)
+    dataset = DefaultDataset(filenames, args.input_size, params, augment=True)
 
     if args.distributed:
         sampler = data.distributed.DistributedSampler(dataset)
 
     loader = data.DataLoader(dataset, args.batch_size, shuffle=(sampler is None), sampler=sampler,
-                             num_workers=8, pin_memory=True, collate_fn=Dataset.collate_fn)
+                             num_workers=8, pin_memory=True, collate_fn=DefaultDataset.collate_fn)
 
     num_steps = len(loader)
     scheduler = LinearLR(args, params, num_steps)

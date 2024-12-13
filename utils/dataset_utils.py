@@ -12,7 +12,7 @@ from yolohub.utils.general import random_perspective, mix_up, resize, augment_hs
 
 FORMATS = ('bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp')
 
-class Dataset(data.Dataset):
+class DefaultDataset(data.Dataset):
     def __init__(self, filenames, input_size, params, augment):
         self.params = params
         self.mosaic = augment

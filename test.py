@@ -1,7 +1,7 @@
 import torch
 import tqdm
 import os
-from yolohub.utils.dataset_utils import Dataset
+from yolohub.utils.dataset_utils import DefaultDataset
 from yolohub.utils.general import compute_ap, non_max_suppression, wh2xy, compute_metric
 
 data_dir = '../Dataset/COCO'
@@ -14,9 +14,9 @@ def test(args, params, model=None):
             filename = os.path.basename(filename.rstrip())
             filenames.append(f'{data_dir}/images/val2017/' + filename)
 
-    dataset = Dataset(filenames, args.input_size, params, augment=False)
+    dataset = DefaultDataset(filenames, args.input_size, params, augment=False)
     loader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=False, num_workers=4,
-                                         pin_memory=True, collate_fn=Dataset.collate_fn)
+                                         pin_memory=True, collate_fn=DefaultDataset.collate_fn)
 
     plot = False
     if not model:
